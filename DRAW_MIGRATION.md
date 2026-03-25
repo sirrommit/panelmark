@@ -290,7 +290,7 @@ migrates the shared rendering logic for all six.
 
 ---
 
-### Phase 4 — TUI: migrate individual interaction `render()` methods
+### Phase 4 — TUI: migrate individual interaction `render()` methods ✓
 
 Each file below: change signature to `render(self, context, focused=False) ->
 list[DrawCommand]`, build and return command list instead of printing.
@@ -337,7 +337,7 @@ list[DrawCommand]`, build and return command list instead of printing.
 
 ---
 
-### Phase 5 — TUI: update `Renderer`
+### Phase 5 — TUI: update `Renderer` ✓
 
 - [ ] **Update `panelmark_tui/renderer.py`**
   - Import `TUICommandExecutor` from `.executor`
@@ -358,7 +358,7 @@ list[DrawCommand]`, build and return command list instead of printing.
 
 ---
 
-### Phase 6 — TUI: migrate widgets
+### Phase 6 — TUI: migrate widgets ✓
 
 Widgets create their own internal `Shell` instances and use `run_modal()`.
 Their interactions are the same ones updated in Phase 4. The widgets
@@ -555,31 +555,33 @@ Phase 2 — panelmark-tui executor layer ✓
 Phase 3 — scrollable base ✓
   [x] panelmark_tui/interactions/scrollable.py
 
-Phase 4 — individual interactions
-  [ ] interactions/menu.py                  (MenuFunction, MenuReturn, MenuHybrid)
-  [ ] interactions/list_view.py
-  [ ] interactions/checkbox.py
-  [ ] interactions/form.py
-  [ ] interactions/textbox.py
-  [ ] interactions/function.py              (see compatibility note)
-  [ ] interactions/status_message.py
+Phase 4 — individual interactions ✓
+  [x] interactions/menu.py                  (MenuFunction, MenuReturn, MenuHybrid)
+  [x] interactions/list_view.py
+  [x] interactions/checkbox.py
+  [x] interactions/form.py
+  [x] interactions/textbox.py
+  [x] interactions/function.py              (handler now receives context)
+  [x] interactions/status_message.py
 
-Phase 5 — renderer
-  [ ] panelmark_tui/renderer.py
+Phase 5 — renderer ✓
+  [x] panelmark_tui/renderer.py
+  [x] panelmark_tui/shell.py               (_redraw_dirty updated)
 
-Phase 6 — widgets
-  [ ] widgets/confirm.py                    (verify only)
-  [ ] widgets/alert.py                      (verify only)
-  [ ] widgets/input_prompt.py               (verify only)
-  [ ] widgets/list_select.py                (verify only)
-  [ ] widgets/file_picker.py                (verify + dynamic rebuild check)
-  [ ] widgets/date_picker.py                (verify + Function migration)
-  [ ] widgets/progress.py                   (add executor call to update path)
+Phase 6 — widgets ✓
+  [x] widgets/confirm.py                    (no direct render() calls)
+  [x] widgets/alert.py                      (no direct render() calls)
+  [x] widgets/input_prompt.py               (no direct render() calls)
+  [x] widgets/list_select.py                (no direct render() calls)
+  [x] widgets/file_picker.py                (no direct render() calls)
+  [x] widgets/date_picker.py                (_NavInteraction + _CalendarInteraction migrated)
+  [x] widgets/progress.py                   (_BarInteraction migrated; _flush_dirty updated)
 
-Phase 7 — tests
-  [ ] tests/interactions/* render tests     (assert on DrawCommand list)
-  [ ] tests/test_renderer.py               (update if exists)
-  [ ] panelmark/tests/ draw module tests   (new)
+Phase 7 — tests ✓
+  [x] tests/test_interactions.py            (assert on DrawCommand list)
+  [x] tests/test_scrollable.py             (prime() uses RenderContext)
+  [x] tests/test_renderer.py               (render_region tests updated)
+  [ ] panelmark/tests/ draw module tests   (new — optional)
 
 Phase 8 — documentation
   [ ] RENDER_ABSTRACTION.md                (note Option 3 chosen)
