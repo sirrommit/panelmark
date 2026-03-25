@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from panelmark.draw import DrawCommand, RenderContext
 
 
 class Interaction(ABC):
@@ -11,8 +12,28 @@ class Interaction(ABC):
         return True
 
     @abstractmethod
-    def render(self, region, term, focused: bool = False) -> None:
-        """Render the interaction into the given region using the terminal."""
+    def render(self, context: RenderContext, focused: bool = False) -> list[DrawCommand]:
+        """Return draw commands describing the current visual state of this interaction.
+
+        Commands use region-relative coordinates: ``(0, 0)`` is the top-left
+        cell of this interaction's assigned region. The renderer maps them to
+        screen-absolute positions when executing via its command executor.
+
+        The returned list should be a complete description of the interaction's
+        visual state for the given context dimensions. Partial updates are not
+        supported — callers may skip calling ``render()`` for regions they
+        determine are unchanged, so the list must always be fully self-contained.
+
+        Parameters
+        ----------
+        context:
+            Rendering context carrying region dimensions (``context.width``,
+            ``context.height``) and renderer capability flags. Use
+            ``context.supports(feature)`` to degrade gracefully on renderers
+            that lack a capability.
+        focused:
+            True if this interaction currently has keyboard focus.
+        """
         ...
 
     @abstractmethod
