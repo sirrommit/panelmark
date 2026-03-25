@@ -243,9 +243,9 @@ Tasks are ordered by dependency. Complete each phase before beginning the next.
 
 ---
 
-### Phase 2 — TUI: executor and context factory
+### Phase 2 — TUI: executor and context factory ✓
 
-- [ ] **Create `panelmark_tui/executor.py`**
+- [x] **Create `panelmark_tui/executor.py`**
   - `TUICommandExecutor.__init__(self, term)`
   - `execute(self, commands: list[DrawCommand], region: Region) -> None`
     - Iterates commands, dispatches to `_write`, `_fill`, `_cursor`
@@ -262,13 +262,14 @@ Tasks are ordered by dependency. Complete each phase before beginning the next.
     it currently lives (or duplicate from `_apply_attrs` pattern in `style.py`)
     into a private `_apply_style(style: dict, term) -> str` function here
 
-- [ ] **Create `panelmark_tui/context.py`**
+- [x] **Create `panelmark_tui/context.py`**
   - `build_render_context(region: Region, term) -> RenderContext`
   - Detect capabilities from `term.number_of_colors`, add `'cursor'` and
     `'unicode'` unconditionally for TUI
   - This function is called by `Renderer.render_region()` for each region
 
-- [ ] **Update `panelmark_tui/__init__.py`** to export new public names if any
+- [x] **Update `panelmark_tui/__init__.py`** to export new public names if any
+  (executor and context factory are internal — no public exports needed)
 
 ---
 
@@ -558,10 +559,10 @@ Phase 1 — panelmark core ✓
   [x] panelmark/interactions/__init__.py    (re-export draw types)
   [x] panelmark/__init__.py                 (no change needed)
 
-Phase 2 — panelmark-tui executor layer
-  [ ] panelmark_tui/executor.py             (new)
-  [ ] panelmark_tui/context.py              (new)
-  [ ] panelmark_tui/__init__.py             (update exports if needed)
+Phase 2 — panelmark-tui executor layer ✓
+  [x] panelmark_tui/executor.py             (new)
+  [x] panelmark_tui/context.py              (new)
+  [x] panelmark_tui/__init__.py             (no change needed)
 
 Phase 3 — scrollable base
   [ ] panelmark_tui/interactions/scrollable.py
