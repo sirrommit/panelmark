@@ -523,18 +523,18 @@ the draw command model makes more visible.
   Implements its own `render()` returning `WriteCmd` commands, no
   active-index highlighting.
 
-**TODO (Phase 9):**
+**TODO (Phase 9):** ✓ **Complete**
 
-- [ ] Add `_Scrollable` base class to `scrollable.py` with only:
-  `_scroll_offset`, `_last_height`, `_clamp_scroll()`
-- [ ] Make `_ScrollableList` extend `_Scrollable` instead of `Interaction`
+- [x] Add `_Scrollable` base class to `scrollable.py` with only:
+  `_scroll_offset`, `_last_height`, `_clamp_scroll_to()`, `_scroll_by()`
+- [x] Make `_ScrollableList` extend `_Scrollable` instead of `Interaction`
   directly; remove the scroll state it now duplicates
-- [ ] Migrate `ListView` (and `SubList` if applicable) to inherit
-  `_Scrollable` instead of `_ScrollableList`; write a direct `render()`
-  that does not use `_build_rows()`
-- [ ] Update tests for `ListView` to confirm it no longer has active-index
-  behaviour
-- [ ] Update `scrollable.py` class docstrings
+- [x] Migrate `ListView` (and `SubList`) to inherit `_Scrollable` instead
+  of `_ScrollableList`; direct `render()` using `WriteCmd`/`FillCmd`, no
+  `_build_rows()`; `is_focusable = False` preserved for backwards compat
+- [x] Update tests for `ListView`/`SubList` — `TestListViewScroll` and
+  `TestSubListScroll` added to `tests/test_scrollable.py`
+- [x] Update `scrollable.py` class docstrings
 
 ---
 
@@ -595,10 +595,10 @@ Phase 8 — documentation ✓
   [x] panelmark-tui/docs/widgets.md       (new — all 7 modal widgets)
   [x] panelmark-tui/docs/testing.md       (new — MockTerminal + test patterns)
 
-Phase 9 — post-migration: _Scrollable split (separate PR)
-  [ ] Add _Scrollable base class to scrollable.py
-  [ ] Make _ScrollableList extend _Scrollable
-  [ ] Migrate ListView/SubList to _Scrollable
-  [ ] Update ListView tests
-  [ ] Update scrollable.py docstrings
+Phase 9 — post-migration: _Scrollable split ✓
+  [x] Add _Scrollable base class to scrollable.py
+  [x] Make _ScrollableList extend _Scrollable
+  [x] Migrate ListView/SubList to _Scrollable
+  [x] Update ListView/SubList tests (TestListViewScroll, TestSubListScroll)
+  [x] Update scrollable.py docstrings
 ```
