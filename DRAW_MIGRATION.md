@@ -273,32 +273,20 @@ Tasks are ordered by dependency. Complete each phase before beginning the next.
 
 ---
 
-### Phase 3 — TUI: migrate `_ScrollableList` base class
+### Phase 3 — TUI: migrate `_ScrollableList` base class ✓
 
 The scrollable base class is used by `MenuFunction`, `MenuReturn`,
 `MenuHybrid`, `ListView`, `CheckBox`, and `FormInput`. Migrating it once
 migrates the shared rendering logic for all six.
 
-- [ ] **Update `panelmark_tui/interactions/scrollable.py`**
-  - Rename `_render_rows(display_lines, region, term, focused, active_marker)`
-    to `_build_rows(display_lines, context, focused, active_marker)` — returns
-    `list[DrawCommand]` instead of printing
-  - Replace `term.reverse + clipped + term.normal` with:
-    `WriteCmd(row=screen_i, col=0, text=clipped, style={'reverse': True})`
-    when `context.supports('color')` or unconditionally (reverse is always
-    meaningful)
-  - Active marker without focus: `WriteCmd(row=screen_i, col=0, text=f'> {line}'[:context.width].ljust(context.width))`
-  - Plain row: `WriteCmd(row=screen_i, col=0, text=clipped)`
-  - Clear trailing rows: `FillCmd(row=len(display_lines), col=0, width=context.width, height=context.height - len(display_lines))`
-  - Update class docstring to reflect new return type
-  - Remove `region` and `term` parameters from `_build_rows` signature;
-    replace with `context: RenderContext`
-  - **Future-extraction note:** Keep scroll state (`_scroll_offset`,
-    `_last_height`, `_clamp_scroll()`) as a clearly separable block at the
-    top of the class, separate from `_build_rows()`. A future `_Scrollable`
-    base class (Phase 9) will lift exactly that block out. Mixing scroll
-    state with row-building logic makes that extraction surgical rather than
-    a clean cut.
+- [x] **Update `panelmark_tui/interactions/scrollable.py`**
+  - Added `_build_rows(display_lines, context, focused, active_marker)` returning
+    `list[DrawCommand]`
+  - `_render_rows` kept as a deprecated shim (removed in Phase 4 once all
+    subclasses are migrated)
+  - Scroll state block clearly separated from row-building block per the
+    future-extraction note
+  - Class and module docstrings updated
 
 ---
 
@@ -564,8 +552,8 @@ Phase 2 — panelmark-tui executor layer ✓
   [x] panelmark_tui/context.py              (new)
   [x] panelmark_tui/__init__.py             (no change needed)
 
-Phase 3 — scrollable base
-  [ ] panelmark_tui/interactions/scrollable.py
+Phase 3 — scrollable base ✓
+  [x] panelmark_tui/interactions/scrollable.py
 
 Phase 4 — individual interactions
   [ ] interactions/menu.py                  (MenuFunction, MenuReturn, MenuHybrid)
