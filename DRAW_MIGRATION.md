@@ -404,7 +404,7 @@ event loop. Verify each widget for any direct `render()` calls.
 
 ---
 
-### Phase 8 — Documentation
+### Phase 8 — Documentation ✓
 
 - [ ] **Update `panelmark/RENDER_ABSTRACTION.md`**
   - Add a note at the top: "Option 3 was chosen. See `DRAW_MIGRATION.md` for
@@ -583,12 +583,17 @@ Phase 7 — tests ✓
   [x] tests/test_renderer.py               (render_region tests updated)
   [ ] panelmark/tests/ draw module tests   (new — optional)
 
-Phase 8 — documentation
-  [ ] RENDER_ABSTRACTION.md                (note Option 3 chosen)
-  [ ] ECOSYSTEM.md                         (update term/draw description)
-  [ ] panelmark-tui/README.md              (update interaction examples)
-  [ ] panelmark/README.md                  (update Interaction ABC docs)
-  [ ] panelmark/draw.py module docstring   (coordinate system, style keys)
+Phase 8 — documentation ✓
+  [x] RENDER_ABSTRACTION.md                (Option 3 chosen note added)
+  [x] panelmark/README.md                  (new — project overview + quick start)
+  [x] panelmark/docs/shell-language.md    (new — full shell language reference)
+  [x] panelmark/docs/draw-commands.md     (new — DrawCommand types + style dict)
+  [x] panelmark/docs/custom-interactions.md (new — Interaction ABC guide)
+  [x] panelmark-tui/README.md              (new — quick start + doc index)
+  [x] panelmark-tui/docs/getting-started.md (new — step-by-step guide)
+  [x] panelmark-tui/docs/interactions.md  (new — all 10 interaction types)
+  [x] panelmark-tui/docs/widgets.md       (new — all 7 modal widgets)
+  [x] panelmark-tui/docs/testing.md       (new — MockTerminal + test patterns)
 
 Phase 9 — post-migration: _Scrollable split (separate PR)
   [ ] Add _Scrollable base class to scrollable.py

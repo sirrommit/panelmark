@@ -1,5 +1,11 @@
 # Render Abstraction: Options for Replacing `term`
 
+> **Status:** **Option 3 (Draw Commands) was chosen and implemented** in the
+> `draw-commands` branch. See `DRAW_MIGRATION.md` for the implementation plan and
+> `panelmark/draw.py` for the resulting API.
+>
+> This document is retained as a record of the design decision process.
+
 ## The Problem
 
 `Interaction.render(region, term, focused)` passes a blessed `Terminal` object as its
