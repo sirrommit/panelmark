@@ -196,7 +196,7 @@ class Shell:
             return ('exit', None)
 
         # Focus movement
-        if key == '\t':
+        if key in ('\t', 'KEY_TAB'):
             self._move_focus(1)
             return ('continue', None)
         if key == 'KEY_BTAB':
