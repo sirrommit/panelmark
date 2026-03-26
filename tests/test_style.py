@@ -50,6 +50,38 @@ class TestStripComments:
         model = Parser().parse(definition)
         assert model.root is not None
 
+    def test_hash_line_comment_removed(self):
+        text = '# this is a comment\n|=====|\n|{$x$}|\n|=====|'
+        result = strip_comments(text)
+        assert '#' not in result
+        assert 'this is a comment' not in result
+
+    def test_hash_trailing_comment_removed(self):
+        text = '|=== Title ===|  # trailing comment\n|{$x$}|'
+        result = strip_comments(text)
+        assert 'trailing comment' not in result
+        assert '|=== Title ===|' in result
+
+    def test_hash_inside_block_comment_not_double_processed(self):
+        # The # inside /* */ should vanish with the block comment,
+        # not be treated as a line comment start.
+        text = '/* has # inside */\n|=====|\n|{$x$}|\n|=====|'
+        result = strip_comments(text)
+        assert '#' not in result
+        assert 'has' not in result
+        assert '|=====|' in result
+
+    def test_hash_comment_inside_shell_parses_correctly(self):
+        from panelmark.parser import Parser
+        definition = """
+# top-level comment
+|=== My App ===|   # title row
+|{12R $menu$ }|    # menu panel
+|==============|   # bottom border
+"""
+        model = Parser().parse(definition)
+        assert model.root is not None
+
 
 class TestParseStyled:
     def test_plain_text_no_tags(self):

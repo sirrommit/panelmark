@@ -190,6 +190,51 @@ class TestParserValid:
         assert vsplit.right.name == 'right'
 
 
+class TestDoubleVerticalDivider:
+    """Tests for the || double-line vertical split divider."""
+
+    DOUBLE_DIV_SHELL = """
+|=== App ===|
+|{$left$  }||{$right$ }|
+|===========|
+"""
+
+    def test_double_divider_creates_vsplit(self):
+        model = Parser().parse(self.DOUBLE_DIV_SHELL)
+        vsplits = collect_vsplits(model.root)
+        assert len(vsplits) == 1
+
+    def test_double_divider_sets_divider_double(self):
+        model = Parser().parse(self.DOUBLE_DIV_SHELL)
+        vsplit = collect_vsplits(model.root)[0]
+        assert vsplit.divider == 'double'
+
+    def test_single_divider_sets_divider_single(self):
+        model = Parser().parse(SIMPLE_SHELL)
+        vsplit = collect_vsplits(model.root)[0]
+        assert vsplit.divider == 'single'
+
+    def test_double_divider_regions_named_correctly(self):
+        model = Parser().parse(self.DOUBLE_DIV_SHELL)
+        names = {p.name for p in collect_panels(model.root) if p.name}
+        assert names == {'left', 'right'}
+
+    def test_hash_is_not_a_divider(self):
+        """# is now a comment character, not a divider; a lone # in inner content
+        that survives strip_comments (e.g. inside a region spec) should not
+        trigger a VSplit."""
+        # With strip_comments applied first, any # on a shell line is stripped,
+        # so the parser should not see it as a divider character.
+        shell = """
+|=====|
+|{$x$}|   # line comment
+|=====|
+"""
+        model = Parser().parse(shell)
+        vsplits = collect_vsplits(model.root)
+        assert len(vsplits) == 0
+
+
 class TestParserErrors:
     def test_duplicate_region_name(self):
         shell = """

@@ -37,7 +37,7 @@ def _parse_block(lines, seen_names):
 
     Algorithm:
       1. Find a full HSplit (border row with no '{') → split there, recurse
-      2. Else find a full VSplit (column divider '|'/'#' in ALL rows) → split, recurse
+      2. Else find a full VSplit (column divider '|'/'||' in ALL rows) → split, recurse
       3. Else → parse as a leaf Panel
     """
     if not lines:
@@ -59,7 +59,7 @@ def _parse_block(lines, seen_names):
         return VSplit(
             left=_parse_block(left_lines, seen_names),
             right=_parse_block(right_lines, seen_names),
-            divider='double' if div_char == '#' else 'single',
+            divider='double' if div_char == '||' else 'single',
         )
 
     # 3. Leaf
@@ -81,9 +81,9 @@ def _find_full_hsplit(lines):
 
 def _find_full_vsplit(lines):
     """
-    Return the divider char ('|' or '#') if ALL column rows (rows containing
-    '{') have an outer divider (a '|' or '#' that lies outside any '{…}'
-    block) as their first such character, and all agree on the same char.
+    Return the divider token ('|' or '||') if ALL column rows (rows
+    containing '{') have an outer divider that lies outside any '{…}'
+    block as their first such character, and all agree on the same token.
     Returns None if no consistent structural vertical split exists.
     """
     col_rows = [inner for (_, inner) in lines if '{' in inner]
@@ -104,33 +104,43 @@ def _find_full_vsplit(lines):
 
 def _first_outer_divider(inner):
     """
-    Return (pos, char) of the first '|' or '#' that lies outside all
-    '{…}' blocks in *inner*, or (None, None) if none exists.
+    Return (pos, token) of the first structural divider that lies outside
+    all '{…}' blocks in *inner*, or (None, None) if none exists.
+
+    Tokens:
+      '||'  — double-line vertical divider (two consecutive ``|`` chars)
+      '|'   — single-line vertical divider
     """
     depth = 0
-    for p, ch in enumerate(inner):
+    i = 0
+    while i < len(inner):
+        ch = inner[i]
         if ch == '{':
             depth += 1
         elif ch == '}':
             depth -= 1
-        elif ch in ('|', '#') and depth == 0:
-            return p, ch
+        elif depth == 0 and ch == '|':
+            if inner[i:i + 2] == '||':
+                return i, '||'
+            return i, '|'
+        i += 1
     return None, None
 
 
 def _split_vertical(lines, div_char):
     """
     Split each (lineno, inner) at its first outer divider structurally,
-    i.e. at the first '|'/'#' outside '{…}' blocks.
+    i.e. at the first '|' or '||' outside '{…}' blocks.
     Lines with no outer divider are split at position 0 (empty left side).
     """
     left = []
     right = []
+    div_len = len(div_char)  # 1 for '|', 2 for '||'
     for ln, inner in lines:
         p, _ = _first_outer_divider(inner)
         if p is not None:
             left.append((ln, inner[:p]))
-            right.append((ln, inner[p + 1:]))
+            right.append((ln, inner[p + div_len:]))
         else:
             # No divider (shouldn't happen if _find_full_vsplit passed)
             left.append((ln, inner))

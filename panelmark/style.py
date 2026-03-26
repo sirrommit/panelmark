@@ -89,19 +89,30 @@ def styled_visual_len(text: str) -> int:
     return len(styled_plain_text(text))
 
 
-# ── C-style comment stripping ───────────────────────────────────────────────
+# ── Comment stripping ───────────────────────────────────────────────────────
 
-_COMMENT_RE = re.compile(r'/\*.*?\*/', re.DOTALL)
+_BLOCK_COMMENT_RE = re.compile(r'/\*.*?\*/', re.DOTALL)
+_LINE_COMMENT_RE = re.compile(r'#[^\n]*')
 
 
 def strip_comments(text: str) -> str:
     """
-    Remove ``/* … */`` comments from a shell definition string.
+    Remove comments from a shell definition string.
 
-    Newlines inside a comment are preserved so that the line structure of
-    the definition is not disrupted.
+    Two comment forms are supported:
+
+    - ``/* … */`` block comments (may span multiple lines).  Newlines inside
+      a block comment are preserved so that the line numbering of the
+      definition is not disrupted.
+    - ``#`` line comments: everything from ``#`` to the end of the line is
+      removed.
+
+    Block comments are stripped first so that a ``#`` character inside a
+    ``/* … */`` comment is never treated as a line-comment start.
     """
-    def _replacer(m: re.Match) -> str:
+    def _block_replacer(m: re.Match) -> str:
         return '\n' * m.group().count('\n')
 
-    return _COMMENT_RE.sub(_replacer, text)
+    text = _BLOCK_COMMENT_RE.sub(_block_replacer, text)
+    text = _LINE_COMMENT_RE.sub('', text)
+    return text

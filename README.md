@@ -6,6 +6,27 @@ ASCII-art shell language, and for implementing the interaction logic that runs i
 panelmark is the **core library** in the panelmark ecosystem. It has no runtime dependencies on
 any terminal library. It defines:
 
+---
+
+## What is real today
+
+| Feature | Status |
+|---------|--------|
+| Shell definition language (ASCII-art DSL) | ✅ Fully working |
+| `#` line comments and `/* */` block comments | ✅ Fully working |
+| Horizontal splits (`=` / `-` border rows) | ✅ Fully working |
+| Vertical splits — single-line divider (`\|`) | ✅ Fully working |
+| Vertical splits — double-line divider (`\|\|`) | ✅ Fully working |
+| Equal-width fill splits (all columns fill-width) | ❌ Not yet — left column takes all space |
+| Panel headings (`__text__` syntax) | ⚠️ Parsed and stored; renderers must implement display |
+| `Shell` state machine (focus, dirty tracking, key dispatch, `on_change`, `bind`) | ✅ Fully working |
+| Draw command abstraction (`DrawCommand`, `RenderContext`, `WriteCmd`, `FillCmd`, `CursorCmd`) | ✅ Fully working |
+| `Interaction` base class | ✅ Fully working |
+
+See [panelmark-tui/KNOWN_LIMITATIONS.md](../panelmark-tui/KNOWN_LIMITATIONS.md) for the combined limitations list.
+
+---
+
 - The **shell definition language** — an ASCII-art syntax for describing layouts
 - The **layout model** — resolved geometry (row, col, width, height) for each named region
 - The **draw command abstraction** — renderer-agnostic `DrawCommand` types returned by interactions

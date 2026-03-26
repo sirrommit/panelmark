@@ -9,7 +9,13 @@ flat `Region` objects (row, col, width, height) at a given terminal size.
 ## Overview
 
 Every shell definition is a block of lines. Each line must be enclosed in outer pipe
-characters `|...|`. Blank lines are ignored. Comments beginning with `#` are stripped.
+characters `|...|`. Blank lines are ignored.
+
+Two comment forms are supported:
+
+- `# line comment` — everything from `#` to the end of the line is removed before parsing.
+- `/* block comment */` — C-style block comments may span multiple lines and can appear
+  inline inside a shell row, which is useful for annotating individual panels.
 
 ```
 |=== Title ===|        ← horizontal border (double-line style, with title)
@@ -59,9 +65,8 @@ Supported tags: `<bold>`, `<italic>`, `<underline>`, `<reverse>`, `<red>`, `<gre
 
 ## Vertical Splits
 
-A **vertical split** (left/right) is produced by a structural column divider — a `|` or `#`
-character that appears **outside** any `{...}` block and is consistent across **all** content
-rows.
+A **vertical split** (left/right) is produced by a structural column divider that appears
+**outside** any `{...}` block and is consistent across **all** content rows.
 
 ```
 |{$left$  }|{$right$}|
@@ -71,7 +76,7 @@ The inner `|` between the two `{...}` blocks is the structural divider. It must 
 exactly the same structural position in every content row of the block.
 
 - `|` produces a **single-line** vertical divider (`│`)
-- `#` produces a **double-line** vertical divider (`║`)
+- `||` produces a **double-line** vertical divider (`║`)
 
 Splits can be nested to any depth. The parser resolves them recursively:
 
@@ -207,7 +212,7 @@ This produces:
 | `=== Title ===` | Horizontal border with centred title |
 | `<bold>text</>` | Style markup in border titles |
 | `\|` between blocks | Single-line vertical split divider |
-| `#` between blocks | Double-line vertical split divider |
+| `\|\|` between blocks | Double-line vertical split divider |
 | `{...}` | Content block specifying a panel |
 | `$name$` | Region name (inside `{...}`) |
 | `20` at start | Fixed 20-char width (inside `{...}`) |
@@ -216,7 +221,8 @@ This produces:
 | `50%R` | Percentage height (inside `{...}`) |
 | `__text__` | Panel heading (inside `{...}`) |
 | Blank lines | Ignored |
-| `# comment` | Line comments (stripped before parsing) |
+| `# comment` | Line comment — stripped to end of line before parsing |
+| `/* comment */` | Block comment — may span lines; newlines preserved |
 
 ---
 
