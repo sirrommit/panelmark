@@ -8,6 +8,7 @@ class Region:
     col: int        # 0-based terminal col
     width: int
     height: int
+    heading: str | None = None
 
 
 @dataclass
@@ -96,7 +97,8 @@ def _resolve_node(node, row: int, col: int, width: int, height: int,
     if isinstance(node, Panel):
         if node.name:
             return [Region(name=node.name, row=row, col=col,
-                           width=width, height=height)]
+                           width=width, height=height,
+                           heading=node.heading)]
         return []
 
     if isinstance(node, VSplit):

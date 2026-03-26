@@ -153,8 +153,9 @@ two outer border walls and any internal dividers).
 
 ### Heading
 
-`__text__` inside the block attaches a heading string to the panel. The heading is passed
-to the renderer and may be displayed (e.g. in a sub-border).
+`__text__` inside the block attaches a heading string to the panel. The heading is rendered
+as a centred title in a single-line `├─── Heading ───┤` border at the top of the panel's
+content area, consuming one row of the panel's height.
 
 ```
 |{__Navigation__ $sidebar$}|
