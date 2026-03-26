@@ -1,7 +1,7 @@
 import pytest
 from panelmark.layout import (
     LayoutModel, Region, HSplit, VSplit, Panel, BorderRow,
-    _declared_width, _declared_height,
+    _declared_width, _declared_height, _is_all_fill,
 )
 from panelmark.parser import Parser
 
@@ -204,6 +204,114 @@ class TestLayoutModelResolve:
         assert names['top'].row != names['bot'].row
         # right should span from where top is to below bot (height = top + pb + bot)
         assert names['right'].height == names['top'].height + 1 + names['bot'].height
+
+    def test_resolve_two_fill_columns_equal(self):
+        """Two fill columns must share available width equally."""
+        shell = """
+|=====|
+|{12R $left$ }|{12R $right$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        regions = model.resolve(80, 24)
+        by_name = {r.name: r for r in regions}
+        # Inner width = 78, 1 divider → 77 content chars → 38 + 39 = 77
+        assert by_name['left'].width == 38
+        assert by_name['right'].width == 39
+
+    def test_resolve_two_fill_columns_even_width(self):
+        """Two fill columns on an even inner width each get exactly half."""
+        # Inner width = 79 (term_width=81), 1 divider → 78 content → 39 each
+        shell = """
+|=====|
+|{12R $a$ }|{12R $b$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        regions = model.resolve(81, 24)
+        by_name = {r.name: r for r in regions}
+        assert by_name['a'].width == 39
+        assert by_name['b'].width == 39
+
+    def test_resolve_three_fill_columns_equal(self):
+        """Three fill columns must share available width as equally as possible."""
+        shell = """
+|=====|
+|{12R $a$ }|{12R $b$ }|{12R $c$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        regions = model.resolve(80, 24)
+        by_name = {r.name: r for r in regions}
+        widths = [by_name['a'].width, by_name['b'].width, by_name['c'].width]
+        # Total content = 78 - 2 dividers = 76; 76 // 3 = 25 each, remainder 1 falls right
+        assert widths[0] == 25
+        assert widths[1] == 25
+        assert widths[2] == 26
+
+    def test_resolve_fill_columns_differ_by_at_most_one(self):
+        """With any terminal width, fill columns must differ in width by at most 1."""
+        shell = """
+|=====|
+|{12R $a$ }|{12R $b$ }|{12R $c$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        for term_width in range(20, 120):
+            regions = model.resolve(term_width, 24)
+            by_name = {r.name: r for r in regions}
+            widths = [by_name[n].width for n in ('a', 'b', 'c')]
+            assert max(widths) - min(widths) <= 1, (
+                f"term_width={term_width}: widths={widths} differ by more than 1"
+            )
+
+    def test_resolve_fill_columns_sum_to_available(self):
+        """Fill column widths plus dividers must equal the inner terminal width."""
+        shell = """
+|=====|
+|{12R $a$ }|{12R $b$ }|{12R $c$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        for term_width in range(20, 120):
+            regions = model.resolve(term_width, 24)
+            by_name = {r.name: r for r in regions}
+            total = by_name['a'].width + by_name['b'].width + by_name['c'].width
+            # inner width = term_width - 2 outer borders; minus 2 dividers = content
+            expected_content = term_width - 2 - 2
+            assert total == expected_content, (
+                f"term_width={term_width}: content={total} != {expected_content}"
+            )
+
+    def test_resolve_fixed_fill_unchanged_by_fix(self):
+        """Fixed-left + fill-right behaviour must be unchanged after the fill fix."""
+        shell = """
+|=====|
+|{14 12R $filter$ }|{12R $path$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        regions = model.resolve(80, 24)
+        by_name = {r.name: r for r in regions}
+        assert by_name['filter'].width == 14
+        assert by_name['path'].width == 63
+
+    def test_is_all_fill_panel_fill(self):
+        assert _is_all_fill(make_panel(width=None, is_pct=False)) is True
+
+    def test_is_all_fill_panel_fixed(self):
+        assert _is_all_fill(make_panel(width=25)) is False
+
+    def test_is_all_fill_panel_pct(self):
+        assert _is_all_fill(make_panel(is_pct=True, pct=50.0)) is False
+
+    def test_is_all_fill_vsplit_all_fill(self):
+        node = VSplit(left=make_panel(), right=make_panel(), divider='single')
+        assert _is_all_fill(node) is True
+
+    def test_is_all_fill_vsplit_one_fixed(self):
+        node = VSplit(left=make_panel(width=25), right=make_panel(), divider='single')
+        assert _is_all_fill(node) is False
 
     def test_partial_border_col_height_stretch(self):
         """A column without a partial border stretches to match split column."""

@@ -270,25 +270,48 @@ def _fixed_height(node) -> int | None:
 def _vsplit_left_width(node: "VSplit", width: int, pct_base: int) -> int:
     """Return the left-panel width for a VSplit given *width* available chars.
 
-    If the left side is fill and the right side has an explicit fixed/pct
-    declaration, the right side gets its declared width and the left side
-    fills the remainder.  Otherwise the left side is allocated first and the
-    right side takes what is left.
+    Three cases, evaluated in order:
+
+    1. **Both sides entirely fill-width** — content space is divided equally
+       among all leaf columns; any remainder falls to the rightmost columns.
+    2. **Left side fill, right side has fixed/pct constraints** — right gets its
+       declared width first; left takes what remains.
+    3. **Left side has fixed/pct constraints** — left gets its declared width;
+       right takes what remains (including its own internal fill/fixed columns).
 
     ``pct_base`` must already be computed before calling this helper.
     """
-    if _is_fill_node(node.left) and not _is_fill_node(node.right):
+    left_all_fill = _is_all_fill(node.left)
+    right_all_fill = _is_all_fill(node.right)
+
+    if left_all_fill and right_all_fill:
+        # Equal distribution: each leaf column gets the same content width.
+        # Divide available content space (width minus inter-column dividers)
+        # evenly; remainder pixels fall to the rightmost columns naturally
+        # because the right child receives whatever the left doesn't claim.
+        total_cols = _num_vsplit_cols(node)
+        left_cols = _num_vsplit_cols(node.left)
+        content_width = width - (total_cols - 1)   # strip all inter-col dividers
+        content_per_col = content_width // total_cols
+        # Left total = its content + its own internal dividers
+        left_width = content_per_col * left_cols + (left_cols - 1)
+        return max(0, min(left_width, width - 1))
+
+    if left_all_fill and not right_all_fill:
+        # Right has at least one fixed/pct column; allocate it first.
         right_w = min(_declared_width(node.right, width - 1, pct_base), width - 1)
-        return width - right_w - 1
+        return max(0, width - right_w - 1)
+
+    # Left has at least one fixed/pct column; allocate it first.
     return _declared_width(node.left, width - 1, pct_base)
 
 
 def _is_fill_node(node) -> bool:
-    """Return True if *node* has no explicit fixed-char or percentage width.
+    """Return True if *node* itself has no explicit fixed-char or percentage width.
 
-    A fill node takes whatever space is left after fixed/pct siblings are
-    allocated.  Used by VSplit resolution to decide which side to allocate
-    first when one side is fill and the other is fixed.
+    This is a shallow check — a VSplit always returns False because it is
+    treated as taking all available width regardless of its children's specs.
+    Use ``_is_all_fill`` to check whether an entire subtree is fill-only.
     """
     if node is None:
         return True
@@ -298,9 +321,27 @@ def _is_fill_node(node) -> bool:
         child = node.top if node.top is not None else node.bottom
         return _is_fill_node(child)
     if isinstance(node, VSplit):
-        # A VSplit consumes all available width; treat it as non-fill so that
-        # a sibling fixed panel still gets its declared width.
+        # A VSplit consumes all available width regardless of its children.
         return False
+    return True
+
+
+def _is_all_fill(node) -> bool:
+    """Return True if *every* leaf Panel in this subtree is fill-width.
+
+    Unlike ``_is_fill_node``, this recurses into VSplit children so that a
+    VSplit whose entire column tree has no fixed/pct constraints is correctly
+    identified as all-fill.
+    """
+    if node is None:
+        return True
+    if isinstance(node, Panel):
+        return node.width is None and not node.is_pct
+    if isinstance(node, HSplit):
+        child = node.top if node.top is not None else node.bottom
+        return _is_all_fill(child)
+    if isinstance(node, VSplit):
+        return _is_all_fill(node.left) and _is_all_fill(node.right)
     return True
 
 

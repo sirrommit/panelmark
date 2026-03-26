@@ -160,6 +160,22 @@ to the renderer and may be displayed (e.g. in a sub-border).
 |{__Navigation__ $sidebar$}|
 ```
 
+### Equal fill columns
+
+When all columns in a vertical split group are fill-width (no fixed character count or
+percentage specified), the available content space is divided **equally** among them.
+Any remainder pixels that cannot be divided evenly fall to the rightmost columns, so
+columns differ in width by at most one character.
+
+```
+|{$a$}|{$b$}|{$c$}|    ← three fill columns share space equally
+```
+
+This is guaranteed by the layout resolver. If even one column has a fixed or percentage
+width, only fill columns share whatever space remains after fixed/pct columns are allocated.
+
+---
+
 ### Implicit Height
 
 If no row count specifier is given, the panel's height equals the number of definition

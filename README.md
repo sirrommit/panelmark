@@ -17,7 +17,7 @@ any terminal library. It defines:
 | Horizontal splits (`=` / `-` border rows) | ✅ Fully working |
 | Vertical splits — single-line divider (`\|`) | ✅ Fully working |
 | Vertical splits — double-line divider (`\|\|`) | ✅ Fully working |
-| Equal-width fill splits (all columns fill-width) | ❌ Not yet — left column takes all space |
+| Equal-width fill splits (all columns fill-width) | ✅ Columns share space equally (differ by at most 1 char) |
 | Panel headings (`__text__` syntax) | ⚠️ Parsed and stored; renderers must implement display |
 | `Shell` state machine (focus, dirty tracking, key dispatch, `on_change`, `bind`) | ✅ Fully working |
 | Draw command abstraction (`DrawCommand`, `RenderContext`, `WriteCmd`, `FillCmd`, `CursorCmd`) | ✅ Fully working |
