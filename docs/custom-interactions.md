@@ -181,15 +181,9 @@ def render(self, context: RenderContext, focused: bool = False) -> list[DrawComm
 
 ## Scrollable Interactions
 
-If your interaction displays a scrollable list, you can inherit from
-`panelmark_tui.interactions.scrollable._ScrollableList` (in the `panelmark-tui` package),
-which provides:
-
-- `_active_index` and `_scroll_offset` state
-- `_clamp_scroll()` to keep the active item visible
-- `_build_rows(display_lines, context, focused, active_marker)` to produce `WriteCmd` and `FillCmd` commands for the visible viewport
-
-See [panelmark-tui interactions](../../panelmark-tui/docs/interactions.md) for details.
+If you are writing a renderer-specific interaction library, that renderer may provide
+helper mixins for scroll state and row rendering. See that renderer's own documentation
+for those convenience APIs.
 
 ---
 

@@ -197,8 +197,7 @@ That statement is now false because `RenderContext.supports(feature)` exists.
 
 ## 5. Tighten `docs/custom-interactions.md` so it stays core-focused
 
-**Status: TODO** — "Scrollable Interactions" section still recommends inheriting from
-`panelmark_tui.interactions.scrollable._ScrollableList`.
+**Status: DONE**
 
 ### Problem
 
