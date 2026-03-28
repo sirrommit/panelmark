@@ -43,8 +43,7 @@ main fixes so the cross-links and phrasing remain coherent.
 
 ## 1. Fix dead `renderer-boundary` links
 
-**Status: TODO** — `README.md` (doc table row) and `ECOSYSTEM.md` (bottom of "What the
-core API must not do" paragraph) both still link to `docs/renderer-boundary.md`.
+**Status: DONE**
 
 ### Problem
 
@@ -248,9 +247,9 @@ Option B:
 
 ## 6. Keep `README.md` focused on core and current docs layout
 
-**Status: TODO** — The documentation table still has "Renderer Boundary" linking to
-`docs/renderer-boundary.md`. The "What is real today" table and quick-start example look
-accurate and do not need changes.
+**Status: PARTIAL** — The renderer-boundary link in the doc table is fixed (now points to
+`docs/renderer-spec/overview.md`). The `panelmark-tui` reference is still inventory-style
+(covered by item 2).
 
 ### Problem
 
@@ -308,9 +307,7 @@ details from `panelmark-tui`.
 
 ## 8. Ensure no remaining references to removed `renderer-boundary` doc
 
-**Status: TODO** — `ECOSYSTEM.md` (end of "What the core API must not do") and
-`README.md` (doc table) both still reference `renderer-boundary`. A repo-wide search
-confirms these are the only two occurrences.
+**Status: DONE**
 
 ### Problem
 

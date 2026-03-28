@@ -104,6 +104,7 @@ shell.assign("status", Label("Ready"))
 | [Shell Language](docs/shell-language.md) | Full reference for the ASCII-art shell definition syntax |
 | [Draw Commands](docs/draw-commands.md) | `DrawCommand` types, `RenderContext`, and the `style` dict |
 | [Custom Interactions](docs/custom-interactions.md) | Implementing the `Interaction` ABC |
+| [Renderer Spec](docs/renderer-spec/overview.md) | Renderer compatibility contract, portable library layer, and extension policy |
 
 ---
 
@@ -115,7 +116,7 @@ packages extend it.
 | Package | Role |
 |---------|------|
 | **panelmark** (this package) | Zero-dependency core: shell language, layout, draw commands, interaction protocol |
-| **panelmark-tui** | blessed-powered terminal renderer, 10 interaction types, 7 modal widgets |
+| **panelmark-tui** | blessed-powered terminal renderer, 13 interaction types, 9 modal widgets |
 | *(planned)* panelmark-web | Browser-based renderer via WebSockets |
 
 See [ECOSYSTEM.md](ECOSYSTEM.md) for the full planned ecosystem design.

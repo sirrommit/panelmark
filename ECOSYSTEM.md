@@ -52,10 +52,11 @@ The terminal renderer. Extends `panelmark.Shell` with a `blessed`-powered event 
 - `Shell.run()` — fullscreen terminal event loop
 - `Shell.run_modal()` — modal popup loop inside an existing terminal context
 - `Renderer` — draws box-drawing characters, borders, and region content to a terminal
-- All concrete `Interaction` implementations (MenuFunction, MenuReturn, TextBox,
-  ListView, CheckBox, Function, FormInput, StatusMessage)
-- Prebuilt modal widgets (Confirm, Alert, InputPrompt, ListSelect, FilePicker,
-  DatePicker, Progress)
+- 13 concrete `Interaction` implementations: `MenuFunction`, `MenuReturn`, `MenuHybrid`,
+  `TextBox`, `ListView`, `SubList` (deprecated), `CheckBox`, `Function`, `FormInput`,
+  `StatusMessage`, `TreeView`, `RadioList`, `TableView`
+- 9 prebuilt modal widgets: `Confirm`, `Alert`, `InputPrompt`, `ListSelect`, `FilePicker`,
+  `DatePicker`, `Progress`, `Toast`, `Spinner`
 - `MockTerminal` and `make_key` testing utilities
 
 **Dependencies:** `panelmark`, `blessed >= 1.20`.
@@ -177,6 +178,7 @@ core. The following constraints should hold regardless:
 - The shell definition language must render correctly through every renderer without
   modification. Renderer-specific annotations, if ever needed, belong in the renderer's
   own configuration layer, not in the shell string.
-- The `Interaction` base class must not assume a terminal. Its `render()` signature will
-  need revisiting as non-terminal renderers are added — the `term` argument is
-  TUI-specific and will not translate to HTML or Qt.
+- The `Interaction` base class must not assume a terminal. The current `render()` signature
+  uses `RenderContext` and returns `list[DrawCommand]` (Option 3 from `RENDER_ABSTRACTION.md`),
+  keeping interactions renderer-agnostic.
+  See `panelmark/draw.py` and `docs/renderer-spec/contract.md` for the current contract.
