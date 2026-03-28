@@ -271,8 +271,7 @@ renderer-specific details.
 
 ## 7. Keep `ECOSYSTEM.md` architectural, not catalog-style
 
-**Status: TODO** — `ECOSYSTEM.md` still contains the detailed 13-interaction / 9-widget
-class inventory in the `panelmark-tui` section.
+**Status: DONE**
 
 ### Problem
 

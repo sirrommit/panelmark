@@ -58,6 +58,9 @@ The terminal renderer. Extends `panelmark.Shell` with a `blessed`-powered event 
 
 **Dependencies:** `panelmark`, `blessed >= 1.20`.
 
+The `panelmark-tui` repository and docs are the source of truth for its concrete
+interaction and widget APIs.
+
 **Naming note:** `panelmark-tui` uses the established Python community term for
 terminal text interfaces. When additional renderers ship, the ecosystem uses
 technology/format names throughout (`html`, `tk`, `qt`), making `tui` the
