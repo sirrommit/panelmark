@@ -221,13 +221,13 @@ portable form interaction for structured data collection.
 
 ```python
 DataclassFormInteraction(
-    dc_instance,
+    dataclass_instance,
     actions: list | None = None,
     on_change: callable | None = None,
 )
 ```
 
-`dc_instance` is an instance of a `@dataclasses.dataclass` class.  The interaction
+`dataclass_instance` is an instance of a `@dataclasses.dataclass` class.  The interaction
 introspects the instance's fields to generate form rows.
 
 `actions` is an optional list of action dicts, each with `"label"`, `"shortcut"`, and
@@ -404,7 +404,7 @@ Modal form driven by a dataclass instance.  A thin wrapper around
 
 ```python
 DataclassForm(
-    dc_instance,
+    dataclass_instance,
     title: str = "Edit",
     actions: list | None = None,
     on_change: callable | None = None,
