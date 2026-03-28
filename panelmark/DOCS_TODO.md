@@ -318,9 +318,7 @@ There may be more.
 
 ## 9. Document the key string format for renderer implementors
 
-**Status: TODO** — `panelmark/shell.py` `handle_key` docstring still says "Named keys use
-the blessed convention". `docs/renderer-spec/contract.md` has no "Key string format"
-section listing canonical `KEY_*` names.
+**Status: DONE**
 
 ### Problem
 

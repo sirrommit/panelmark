@@ -180,8 +180,9 @@ class Shell:
         ----------
         key : str
             A plain string key name.  Printable characters are passed as-is
-            (e.g. ``'a'``, ``' '``).  Named keys use the blessed convention
-            (e.g. ``'KEY_UP'``, ``'KEY_ENTER'``, ``'KEY_BTAB'``).
+            (e.g. ``'a'``, ``' '``).  Named keys use panelmark's canonical
+            ``KEY_*`` names (e.g. ``'KEY_UP'``, ``'KEY_ENTER'``, ``'KEY_BTAB'``);
+            see ``docs/renderer-spec/contract.md`` for the full list.
             Control characters are their literal values (e.g. ``'\\x11'`` for
             Ctrl+Q, ``'\\x1b'`` for Escape).
 

@@ -124,6 +124,24 @@ Minimum responsibilities:
 `Shell.handle_key(key)` returns either `('exit', value)` or `('continue', None)`.
 
 
+#### Key string format
+
+`Shell.handle_key` accepts a single `str` argument in one of three forms:
+
+| Category | Form | Examples |
+|----------|------|---------|
+| Printable character | The character itself | `'a'`, `'Z'`, `' '`, `'\t'` |
+| Named key | `KEY_` prefix | `'KEY_UP'`, `'KEY_DOWN'`, `'KEY_LEFT'`, `'KEY_RIGHT'`, `'KEY_ENTER'`, `'KEY_TAB'`, `'KEY_BTAB'`, `'KEY_BACKSPACE'`, `'KEY_DELETE'`, `'KEY_HOME'`, `'KEY_END'`, `'KEY_PGUP'`, `'KEY_PGDN'`, `'KEY_F1'`–`'KEY_F12'` |
+| Control character | Literal escape value | `'\x11'` (Ctrl+Q), `'\x1b'` (Escape) |
+
+These names are panelmark's canonical contract — they are not blessed-specific.  Any
+renderer must map its native input events to these forms before calling `handle_key`.
+
+By default, the base `Shell` treats `'\x1b'` (Escape) and `'\x11'` (Ctrl+Q) as exit
+signals.  Renderers should pass them through unmodified so that the shell's exit
+semantics are preserved.
+
+
 ### 5. Focus Handling
 
 A renderer must honor shell focus behavior.
