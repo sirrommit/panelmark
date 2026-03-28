@@ -43,6 +43,9 @@ main fixes so the cross-links and phrasing remain coherent.
 
 ## 1. Fix dead `renderer-boundary` links
 
+**Status: TODO** — `README.md` (doc table row) and `ECOSYSTEM.md` (bottom of "What the
+core API must not do" paragraph) both still link to `docs/renderer-boundary.md`.
+
 ### Problem
 
 The core docs still link to `docs/renderer-boundary.md`, but that file no longer
@@ -79,6 +82,9 @@ The current renderer-spec docs live under:
 
 
 ## 2. Remove stale `panelmark-tui` inventory counts and class lists from core docs
+
+**Status: TODO** — `README.md` still says "13 interaction types, 9 modal widgets" in the
+ecosystem table (line ~119) and "ready-made modal widgets" in the intro paragraph (line ~39).
 
 ### Problem
 
@@ -128,6 +134,11 @@ Examples of stale details:
 
 ## 3. Remove or rewrite stale references to `MenuHybrid` and `SubList`
 
+**Status: TODO** — `ECOSYSTEM.md` still lists `MenuHybrid` and `SubList` in the
+`panelmark-tui` interaction inventory. `docs/custom-interactions.md` still recommends
+`panelmark_tui.interactions.scrollable._ScrollableList`. `panelmark/interactions/base.py`
+`is_focusable` docstring still says "ListView, SubList".
+
 ### Problem
 
 The core docs and comments still reference `MenuHybrid` and `SubList`, but those
@@ -153,6 +164,9 @@ are not part of the current visible `panelmark-tui` API surface.
 
 
 ## 4. Fix stale architecture wording in `ECOSYSTEM.md`
+
+**Status: TODO** — `ECOSYSTEM.md` bottom of "What the core API must not do" still says
+"at the cost of losing per-render capability queries" and links to `docs/renderer-boundary.md`.
 
 ### Problem
 
@@ -186,6 +200,9 @@ That statement is now false because `RenderContext.supports(feature)` exists.
 
 
 ## 5. Tighten `docs/custom-interactions.md` so it stays core-focused
+
+**Status: TODO** — "Scrollable Interactions" section still recommends inheriting from
+`panelmark_tui.interactions.scrollable._ScrollableList`.
 
 ### Problem
 
@@ -231,6 +248,10 @@ Option B:
 
 ## 6. Keep `README.md` focused on core and current docs layout
 
+**Status: TODO** — The documentation table still has "Renderer Boundary" linking to
+`docs/renderer-boundary.md`. The "What is real today" table and quick-start example look
+accurate and do not need changes.
+
 ### Problem
 
 The README is mostly accurate, but it should better reflect the current
@@ -256,6 +277,9 @@ renderer-specific details.
 
 
 ## 7. Keep `ECOSYSTEM.md` architectural, not catalog-style
+
+**Status: TODO** — `ECOSYSTEM.md` still contains the detailed 13-interaction / 9-widget
+class inventory in the `panelmark-tui` section.
 
 ### Problem
 
@@ -284,6 +308,10 @@ details from `panelmark-tui`.
 
 ## 8. Ensure no remaining references to removed `renderer-boundary` doc
 
+**Status: TODO** — `ECOSYSTEM.md` (end of "What the core API must not do") and
+`README.md` (doc table) both still reference `renderer-boundary`. A repo-wide search
+confirms these are the only two occurrences.
+
 ### Problem
 
 At least two files still referenced `docs/renderer-boundary.md` during review.
@@ -299,6 +327,10 @@ There may be more.
 
 
 ## 9. Document the key string format for renderer implementors
+
+**Status: TODO** — `panelmark/shell.py` `handle_key` docstring still says "Named keys use
+the blessed convention". `docs/renderer-spec/contract.md` has no "Key string format"
+section listing canonical `KEY_*` names.
 
 ### Problem
 
@@ -347,6 +379,12 @@ the phrase "blessed convention" and replace it with "panelmark's canonical
 
 ## 10. Document the dirty-region and render-loop APIs
 
+**Status: PARTIAL** — `docs/renderer-spec/contract.md` section 6 ("Dirty / Redraw
+Behavior") mentions dirty regions and names `shell.mark_all_clean()`, but does not: name
+the `shell.dirty_regions` property explicitly, mention `shell.update()` as a dirty
+trigger, show the expected render loop pattern, or note that focus changes add both old and
+new focused regions to the dirty set.
+
 ### Problem
 
 `Shell.dirty_regions` and `Shell.mark_all_clean()` are mentioned only in the
@@ -385,6 +423,12 @@ Add a section titled **"Dirty-region tracking"** (or similar) to
 
 
 ## 11. Document `handle_key` return value in docs (not just source)
+
+**Status: PARTIAL** — `docs/renderer-spec/contract.md` sections 4 and 7 already state
+`Shell.handle_key(key)` returns `('exit', value)` or `('continue', None)` and describe
+what to do on each. However, this is spread across two sections rather than collected in a
+dedicated subsection. No new required-changes work remains here beyond grouping, which can
+be done as part of the section-10 edit pass.
 
 ### Problem
 
