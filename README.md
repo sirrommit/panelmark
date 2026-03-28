@@ -36,7 +36,7 @@ See [panelmark-tui/KNOWN_LIMITATIONS.md](../panelmark-tui/KNOWN_LIMITATIONS.md) 
 To actually display a shell in a terminal, pair panelmark with
 [**panelmark-tui**](https://github.com/sirrommit/panelmark-tui), which wraps
 [blessed](https://github.com/jquast/blessed) and provides a full event loop, built-in
-interaction types, and ready-made modal widgets.
+interactions, and renderer-specific convenience widgets.
 
 ---
 
@@ -116,7 +116,7 @@ packages extend it.
 | Package | Role |
 |---------|------|
 | **panelmark** (this package) | Zero-dependency core: shell language, layout, draw commands, interaction protocol |
-| **panelmark-tui** | blessed-powered terminal renderer, 13 interaction types, 9 modal widgets |
+| **panelmark-tui** | blessed-powered terminal renderer with concrete interactions and widget conveniences |
 | *(planned)* panelmark-web | Browser-based renderer via WebSockets |
 
 See [ECOSYSTEM.md](ECOSYSTEM.md) for the full planned ecosystem design.

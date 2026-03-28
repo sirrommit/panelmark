@@ -82,8 +82,7 @@ The current renderer-spec docs live under:
 
 ## 2. Remove stale `panelmark-tui` inventory counts and class lists from core docs
 
-**Status: TODO** — `README.md` still says "13 interaction types, 9 modal widgets" in the
-ecosystem table (line ~119) and "ready-made modal widgets" in the intro paragraph (line ~39).
+**Status: DONE**
 
 ### Problem
 
@@ -247,9 +246,7 @@ Option B:
 
 ## 6. Keep `README.md` focused on core and current docs layout
 
-**Status: PARTIAL** — The renderer-boundary link in the doc table is fixed (now points to
-`docs/renderer-spec/overview.md`). The `panelmark-tui` reference is still inventory-style
-(covered by item 2).
+**Status: DONE**
 
 ### Problem
 
