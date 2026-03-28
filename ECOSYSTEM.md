@@ -52,12 +52,9 @@ The terminal renderer. Extends `panelmark.Shell` with a `blessed`-powered event 
 - `Shell.run()` — fullscreen terminal event loop
 - `Shell.run_modal()` — modal popup loop inside an existing terminal context
 - `Renderer` — draws box-drawing characters, borders, and region content to a terminal
-- 13 concrete `Interaction` implementations: `MenuFunction`, `MenuReturn`, `MenuHybrid`,
-  `TextBox`, `ListView`, `SubList` (deprecated), `CheckBox`, `Function`, `FormInput`,
-  `StatusMessage`, `TreeView`, `RadioList`, `TableView`
-- 9 prebuilt modal widgets: `Confirm`, `Alert`, `InputPrompt`, `ListSelect`, `FilePicker`,
-  `DatePicker`, `Progress`, `Toast`, `Spinner`
-- `MockTerminal` and `make_key` testing utilities
+- Concrete `Interaction` library covering common UI patterns
+- Prebuilt modal widgets for common prompts and dialogs
+- Testing utilities (`MockTerminal`, `make_key`)
 
 **Dependencies:** `panelmark`, `blessed >= 1.20`.
 

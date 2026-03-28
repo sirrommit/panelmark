@@ -132,10 +132,9 @@ Examples of stale details:
 
 ## 3. Remove or rewrite stale references to `MenuHybrid` and `SubList`
 
-**Status: TODO** — `ECOSYSTEM.md` still lists `MenuHybrid` and `SubList` in the
-`panelmark-tui` interaction inventory. `docs/custom-interactions.md` still recommends
-`panelmark_tui.interactions.scrollable._ScrollableList`. `panelmark/interactions/base.py`
-`is_focusable` docstring still says "ListView, SubList".
+**Status: DONE** — Named class lists removed from `ECOSYSTEM.md`; `is_focusable` docstring
+fixed in `base.py`. The `_ScrollableList` reference in `docs/custom-interactions.md` is
+addressed by item 5.
 
 ### Problem
 

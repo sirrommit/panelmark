@@ -8,7 +8,7 @@ class Interaction(ABC):
     @property
     def is_focusable(self) -> bool:
         """Return True if this interaction can meaningfully receive keyboard focus.
-        Display-only interactions (ListView, SubList) override this to return False."""
+        Display-only interactions override this to return False."""
         return True
 
     @abstractmethod
