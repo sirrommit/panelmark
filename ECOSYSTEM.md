@@ -176,6 +176,8 @@ core. The following constraints should hold regardless:
   modification. Renderer-specific annotations, if ever needed, belong in the renderer's
   own configuration layer, not in the shell string.
 - The `Interaction` base class must not assume a terminal. The current `render()` signature
-  uses `RenderContext` and returns `list[DrawCommand]` (Option 3 from `RENDER_ABSTRACTION.md`),
-  keeping interactions renderer-agnostic.
-  See `panelmark/draw.py` and `docs/renderer-spec/contract.md` for the current contract.
+  uses `RenderContext` and returns `list[DrawCommand]`, keeping interactions renderer-agnostic.
+  Renderer capability queries are available via `context.supports(feature)` — interactions
+  can branch on capabilities without depending on any renderer directly.
+  See `panelmark/draw.py`, `docs/draw-commands.md`, and `docs/renderer-spec/contract.md`
+  for the current contract.

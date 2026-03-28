@@ -162,8 +162,7 @@ are not part of the current visible `panelmark-tui` API surface.
 
 ## 4. Fix stale architecture wording in `ECOSYSTEM.md`
 
-**Status: TODO** — `ECOSYSTEM.md` bottom of "What the core API must not do" still says
-"at the cost of losing per-render capability queries" and links to `docs/renderer-boundary.md`.
+**Status: DONE**
 
 ### Problem
 
