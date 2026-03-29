@@ -367,11 +367,7 @@ the phrase "blessed convention" and replace it with "panelmark's canonical
 
 ## 10. Document the dirty-region and render-loop APIs
 
-**Status: PARTIAL** — `docs/renderer-spec/contract.md` section 6 ("Dirty / Redraw
-Behavior") mentions dirty regions and names `shell.mark_all_clean()`, but does not: name
-the `shell.dirty_regions` property explicitly, mention `shell.update()` as a dirty
-trigger, show the expected render loop pattern, or note that focus changes add both old and
-new focused regions to the dirty set.
+**Status: DONE**
 
 ### Problem
 

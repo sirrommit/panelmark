@@ -171,6 +171,39 @@ The spec does not constrain whether the renderer uses incremental redraw, full r
 retained buffers, or other optimizations.
 
 
+#### Dirty-region tracking
+
+`shell.dirty_regions` is a `set[str]` of region names that need re-rendering.  It is
+updated by:
+
+- `shell.handle_key(key)` — any interaction or focus change that modifies state marks
+  affected regions dirty
+- `shell.update(name, value)` — marks the named region dirty
+- focus transitions — both the previously focused region and the newly focused region
+  are added to the dirty set, so a renderer that re-renders only `dirty_regions` will
+  automatically repaint focus changes without extra logic
+
+`shell.mark_all_clean()` clears the dirty set.  Call it after the renderer has finished
+re-rendering all dirty regions.
+
+Expected render loop:
+
+```python
+while True:
+    key = collect_input()          # renderer-specific
+    result, value = shell.handle_key(key)
+    for name in shell.dirty_regions:
+        region = shell.get_region(name)
+        interaction = shell.get_interaction(name)
+        ctx = RenderContext(width=region.width, height=region.height, ...)
+        cmds = interaction.render(ctx, focused=(name == shell.focused))
+        executor.execute(region, cmds)
+    shell.mark_all_clean()
+    if result == 'exit':
+        break
+```
+
+
 ### 7. Shell Return Semantics
 
 A renderer must implement shell return behavior consistently.
