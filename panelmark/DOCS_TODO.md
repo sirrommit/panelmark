@@ -408,11 +408,7 @@ Add a section titled **"Dirty-region tracking"** (or similar) to
 
 ## 11. Document `handle_key` return value in docs (not just source)
 
-**Status: PARTIAL** — `docs/renderer-spec/contract.md` sections 4 and 7 already state
-`Shell.handle_key(key)` returns `('exit', value)` or `('continue', None)` and describe
-what to do on each. However, this is spread across two sections rather than collected in a
-dedicated subsection. No new required-changes work remains here beyond grouping, which can
-be done as part of the section-10 edit pass.
+**Status: DONE**
 
 ### Problem
 

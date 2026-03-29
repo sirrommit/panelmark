@@ -142,6 +142,15 @@ signals.  Renderers should pass them through unmodified so that the shell's exit
 semantics are preserved.
 
 
+#### Return value
+
+`Shell.handle_key(key)` returns a `tuple[str, Any]`:
+
+- `('exit', value)` — the shell has finished; the renderer should stop its event loop
+  and return `value` to its caller.
+- `('continue', None)` — the shell is still running; the renderer should keep looping.
+
+
 ### 5. Focus Handling
 
 A renderer must honor shell focus behavior.
