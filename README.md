@@ -23,7 +23,7 @@ any terminal library. It defines:
 | Draw command abstraction (`DrawCommand`, `RenderContext`, `WriteCmd`, `FillCmd`, `CursorCmd`) | ✅ Fully working |
 | `Interaction` base class | ✅ Fully working |
 
-See [panelmark-tui/KNOWN_LIMITATIONS.md](../panelmark-tui/KNOWN_LIMITATIONS.md) for the combined limitations list.
+See [panelmark-tui limitations](https://github.com/sirrommit/panelmark-docs/blob/main/docs/panelmark-tui/limitations.md) for the combined limitations list.
 
 ---
 
@@ -101,25 +101,31 @@ shell.assign("status", Label("Ready"))
 
 | Document | Description |
 |----------|-------------|
-| [Shell Language](docs/shell-language.md) | Full reference for the ASCII-art shell definition syntax |
-| [Draw Commands](docs/draw-commands.md) | `DrawCommand` types, `RenderContext`, and the `style` dict |
-| [Custom Interactions](docs/custom-interactions.md) | Implementing the `Interaction` ABC |
-| [Renderer Spec](docs/renderer-spec/overview.md) | Renderer compatibility contract, portable library layer, and extension policy |
+| [Shell Language](https://github.com/sirrommit/panelmark-docs/blob/main/docs/shell-language/overview.md) | Shell, region, and panel concepts; state machine methods |
+| [Shell Language Syntax](https://github.com/sirrommit/panelmark-docs/blob/main/docs/shell-language/syntax.md) | Full grammar reference for the ASCII-art layout DSL |
+| [Shell Language Examples](https://github.com/sirrommit/panelmark-docs/blob/main/docs/shell-language/examples.md) | Annotated examples; custom interactions; portable rendering patterns |
+| [Draw Commands](https://github.com/sirrommit/panelmark-docs/blob/main/docs/renderer-spec/contract.md) | `DrawCommand` types, `RenderContext`, and the style dict |
+| [Custom Interactions](https://github.com/sirrommit/panelmark-docs/blob/main/docs/shell-language/examples.md) | Implementing the `Interaction` ABC |
+| [Renderer Spec](https://github.com/sirrommit/panelmark-docs/blob/main/docs/renderer-spec/overview.md) | Renderer compatibility contract, portable library layer, and extension policy |
+| [Ecosystem Overview](https://github.com/sirrommit/panelmark-docs/blob/main/docs/ecosystem.md) | Layered design; package responsibilities; dependency direction |
+| [Choosing a Renderer](https://github.com/sirrommit/panelmark-docs/blob/main/docs/getting-started.md) | Decision tree for selecting the right package |
 
 ---
 
 ## Ecosystem
 
-panelmark follows a layered design. The core library is renderer-agnostic; renderer-specific
-packages extend it.
+panelmark follows a layered design. The core library is renderer-agnostic;
+renderer-specific packages extend it.
 
 | Package | Role |
 |---------|------|
 | **panelmark** (this package) | Zero-dependency core: shell language, layout, draw commands, interaction protocol |
-| **panelmark-tui** | blessed-powered terminal renderer with concrete interactions and widget conveniences |
-| *(planned)* panelmark-web | Browser-based renderer via WebSockets |
+| [**panelmark-tui**](https://github.com/sirrommit/panelmark-tui) | Terminal renderer (blessed); portable-library-compatible |
+| [**panelmark-html**](https://github.com/sirrommit/panelmark-html) | Static HTML/CSS renderer; pre-alpha; foundation for panelmark-web |
+| [**panelmark-web**](https://github.com/sirrommit/panelmark-web) | Live web runtime via WebSockets; portable-library-compatible |
 
-See [ECOSYSTEM.md](ECOSYSTEM.md) for the full planned ecosystem design.
+See [ecosystem overview](https://github.com/sirrommit/panelmark-docs/blob/main/docs/ecosystem.md)
+for the full design rationale and dependency diagram.
 
 ---
 

@@ -1,5 +1,8 @@
 # Migration Plan: Option 3 — Render to Draw Commands
 
+> **Internal working note.** See [ecosystem overview](https://github.com/sirrommit/panelmark-docs/blob/main/docs/ecosystem.md)
+> for the authoritative design rationale.
+
 This document is a fully actionable migration plan for replacing the
 `Interaction.render(region, term, focused)` interface with a pure,
 side-effect-free `render(context, focused) -> list[DrawCommand]` interface.

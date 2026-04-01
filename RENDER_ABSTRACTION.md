@@ -1,5 +1,8 @@
 # Render Abstraction: Options for Replacing `term`
 
+> **Internal working note.** See [ecosystem overview](https://github.com/sirrommit/panelmark-docs/blob/main/docs/ecosystem.md)
+> for the authoritative design rationale.
+
 > **Status:** **Option 3 (Draw Commands) was chosen and implemented** in the
 > `draw-commands` branch. See `DRAW_MIGRATION.md` for the implementation plan and
 > `panelmark/draw.py` for the resulting API.
