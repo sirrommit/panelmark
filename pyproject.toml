@@ -6,6 +6,9 @@ build-backend = "setuptools.build_meta"
 name = "panelmark"
 version = "0.1.0"
 description = "A markup language for UI layouts — define panels once, render anywhere."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Timothy Morris PhD", email = "sirrommit@gmail.com" }]
 requires-python = ">=3.10"
 dependencies = []
 keywords = ["ui", "layout", "dsl", "markup", "tui", "terminal", "gui"]
@@ -19,6 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
+
+[project.urls]
+Repository = "https://github.com/sirrommit/panelmark"
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-cov"]
