@@ -1,6 +1,6 @@
 import pytest
 from panelmark.layout import (
-    LayoutModel, Region, HSplit, VSplit, Panel, BorderRow,
+    LayoutModel, Region, HSplit, VSplit, Panel, BorderRow, BorderSpec,
     _declared_width, _declared_height, _is_all_fill,
 )
 from panelmark.parser import Parser
@@ -87,7 +87,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         assert len(regions) == 1
         assert regions[0].name == 'menu'
         assert regions[0].height == 12
@@ -99,7 +99,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         names = {r.name for r in regions}
         assert 'left' in names
         assert 'right' in names
@@ -111,7 +111,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         assert regions[0].row == 1
 
     def test_resolve_region_col_position(self):
@@ -121,7 +121,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         assert regions[0].col == 1
 
     def test_resolve_percentage_width(self):
@@ -131,7 +131,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         side = next(r for r in regions if r.name == 'side')
         assert side.width == 19
 
@@ -143,7 +143,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         by_name = {r.name: r for r in regions}
         assert by_name['filter'].width == 14
         # left border(1) + path_width + divider(1) + 14 + right border(1) = 80
@@ -158,7 +158,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         by_name = {r.name: r for r in regions}
         assert by_name['filter'].width == 14
         assert by_name['path'].width == 63
@@ -170,7 +170,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         assert all(r.name == 'named' for r in regions)
         assert len(regions) == 1
 
@@ -181,7 +181,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         with pytest.raises((AttributeError, TypeError)):
             regions[0].name = 'changed'
 
@@ -195,7 +195,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         names = {r.name: r for r in regions}
         assert 'top' in names
         assert 'bot' in names
@@ -213,7 +213,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         by_name = {r.name: r for r in regions}
         # Inner width = 78, 1 divider → 77 content chars → 38 + 39 = 77
         assert by_name['left'].width == 38
@@ -228,7 +228,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(81, 24)
+        regions, _ = model.resolve(81, 24)
         by_name = {r.name: r for r in regions}
         assert by_name['a'].width == 39
         assert by_name['b'].width == 39
@@ -241,7 +241,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         by_name = {r.name: r for r in regions}
         widths = [by_name['a'].width, by_name['b'].width, by_name['c'].width]
         # Total content = 78 - 2 dividers = 76; 76 // 3 = 25 each, remainder 1 falls right
@@ -258,7 +258,7 @@ class TestLayoutModelResolve:
 """
         model = Parser().parse(shell)
         for term_width in range(20, 120):
-            regions = model.resolve(term_width, 24)
+            regions, _ = model.resolve(term_width, 24)
             by_name = {r.name: r for r in regions}
             widths = [by_name[n].width for n in ('a', 'b', 'c')]
             assert max(widths) - min(widths) <= 1, (
@@ -274,7 +274,7 @@ class TestLayoutModelResolve:
 """
         model = Parser().parse(shell)
         for term_width in range(20, 120):
-            regions = model.resolve(term_width, 24)
+            regions, _ = model.resolve(term_width, 24)
             by_name = {r.name: r for r in regions}
             total = by_name['a'].width + by_name['b'].width + by_name['c'].width
             # inner width = term_width - 2 outer borders; minus 2 dividers = content
@@ -291,7 +291,7 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         by_name = {r.name: r for r in regions}
         assert by_name['filter'].width == 14
         assert by_name['path'].width == 63
@@ -323,7 +323,75 @@ class TestLayoutModelResolve:
 |=====|
 """
         model = Parser().parse(shell)
-        regions = model.resolve(80, 24)
+        regions, _ = model.resolve(80, 24)
         names = {r.name: r for r in regions}
         # Col 0: 8 + pb + 8 = 17 total height; col 1 stretches to 17
         assert names['b'].height == 17
+
+
+class TestBorderSpec:
+    """resolve() returns BorderSpec objects for HSplit border lines."""
+
+    def test_no_border_when_no_hsplit(self):
+        shell = """\
+|=====|
+|{12R $menu$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        _, borders = model.resolve(80, 24)
+        assert borders == []
+
+    def test_border_row_and_width(self):
+        shell = """\
+|=====|
+|{5R $top$ }|
+|-----------|
+|{5R $bot$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        _, borders = model.resolve(80, 24)
+        assert len(borders) == 1
+        b = borders[0]
+        assert isinstance(b, BorderSpec)
+        assert b.row == 6   # 1 (title row) + 5 (top height)
+        assert b.col == 1
+        assert b.width == 78
+
+    def test_border_title(self):
+        shell = """\
+|=====|
+|{5R $top$ }|
+|----Label--|
+|{5R $bot$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        _, borders = model.resolve(80, 24)
+        assert len(borders) == 1
+        assert borders[0].title == 'Label'
+
+    def test_border_no_title(self):
+        shell = """\
+|=====|
+|{5R $top$ }|
+|-----------|
+|{5R $bot$ }|
+|=====|
+"""
+        model = Parser().parse(shell)
+        _, borders = model.resolve(80, 24)
+        assert borders[0].title is None
+
+    def test_shell_borders_property(self):
+        from panelmark.shell import Shell
+        shell = Shell("""\
+|=====|
+|{5R $top$ }|
+|----Label--|
+|{5R $bot$ }|
+|=====|
+""")
+        assert len(shell.borders) == 1
+        assert shell.borders[0].title == 'Label'

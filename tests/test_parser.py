@@ -156,7 +156,7 @@ class TestParserValid:
         with open(example_path) as f:
             content = f.read()
         model = Parser().parse(content)
-        regions = model.resolve(120, 40)
+        regions, _ = model.resolve(120, 40)
         names = {r.name for r in regions}
         assert 'sidemenu' in names
         assert 'mainmenu' in names

@@ -2,6 +2,16 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
+class BorderSpec:
+    """A rendered horizontal border line produced by an HSplit."""
+    row: int
+    col: int
+    width: int
+    style: str        # 'single' or 'double'
+    title: str | None
+
+
+@dataclass(frozen=True)
 class Region:
     name: str
     row: int        # 0-based terminal row
@@ -59,15 +69,19 @@ class LayoutModel:
     has_percentage: bool
 
     def resolve(self, term_width: int, term_height: int,
-                offset_row: int = 0, offset_col: int = 0) -> list:
-        """Return a flat list of Region objects with absolute coordinates.
+                offset_row: int = 0, offset_col: int = 0) -> tuple:
+        """Return ``(regions, borders)`` with absolute coordinates.
+
+        ``regions`` is a flat list of :class:`Region` objects.
+        ``borders`` is a flat list of :class:`BorderSpec` objects for every
+        HSplit border line in the layout.
 
         offset_row / offset_col shift the origin so that modal shells
         (which render at an arbitrary screen position) produce regions
         with the correct absolute terminal coordinates from the start.
         """
         if self.root is None:
-            return []
+            return [], []
         # Content area starts one column inside the left border wall.
         return _resolve_node(self.root,
                              offset_row,
@@ -81,9 +95,9 @@ class LayoutModel:
 # ---------------------------------------------------------------------------
 
 def _resolve_node(node, row: int, col: int, width: int, height: int,
-                  pct_base: int | None) -> list:
+                  pct_base: int | None) -> tuple:
     """
-    Recursively resolve a layout node to a flat list of Regions.
+    Recursively resolve a layout node to ``(regions, borders)``.
 
     row, col   — absolute top-left position of this node
     width      — available width (excluding outer border chars)
@@ -92,14 +106,14 @@ def _resolve_node(node, row: int, col: int, width: int, height: int,
                  None means "compute on first VSplit encountered"
     """
     if node is None:
-        return []
+        return [], []
 
     if isinstance(node, Panel):
         if node.name:
             return [Region(name=node.name, row=row, col=col,
                            width=width, height=height,
-                           heading=node.heading)]
-        return []
+                           heading=node.heading)], []
+        return [], []
 
     if isinstance(node, VSplit):
         if pct_base is None:
@@ -110,11 +124,11 @@ def _resolve_node(node, row: int, col: int, width: int, height: int,
         left_width = _vsplit_left_width(node, width, pct_base)
         right_width = width - left_width - 1
 
-        regions = _resolve_node(node.left, row, col,
-                                left_width, height, pct_base)
-        regions += _resolve_node(node.right, row, col + left_width + 1,
-                                 right_width, height, pct_base)
-        return regions
+        l_regions, l_borders = _resolve_node(node.left, row, col,
+                                             left_width, height, pct_base)
+        r_regions, r_borders = _resolve_node(node.right, row, col + left_width + 1,
+                                             right_width, height, pct_base)
+        return l_regions + r_regions, l_borders + r_borders
 
     if isinstance(node, HSplit):
         top_height = (_declared_height(node.top, height)
@@ -123,16 +137,28 @@ def _resolve_node(node, row: int, col: int, width: int, height: int,
         bottom_height = max(0, height - top_height - border_rows)
 
         regions = []
+        borders = []
         if node.top is not None:
-            regions += _resolve_node(node.top, row, col, width, top_height,
-                                     None)
+            r, b = _resolve_node(node.top, row, col, width, top_height, None)
+            regions += r
+            borders += b
+        if node.border is not None and node.top is not None and node.bottom is not None:
+            borders.append(BorderSpec(
+                row=row + top_height,
+                col=col,
+                width=width,
+                style=node.border.style,
+                title=node.border.title,
+            ))
         if node.bottom is not None:
-            regions += _resolve_node(node.bottom,
-                                     row + top_height + border_rows,
-                                     col, width, bottom_height, None)
-        return regions
+            r, b = _resolve_node(node.bottom,
+                                 row + top_height + border_rows,
+                                 col, width, bottom_height, None)
+            regions += r
+            borders += b
+        return regions, borders
 
-    return []
+    return [], []
 
 
 # ---------------------------------------------------------------------------

@@ -32,6 +32,7 @@ class Shell:
     def __init__(self, definition: str):
         self._layout = Parser().parse(definition)
         self._regions = {}       # name -> Region (resolved geometry)
+        self._borders = []       # list[BorderSpec] (resolved border lines)
         self._interactions = {}  # name -> Interaction
         self._observer = Observer()
         self._focus_order = []   # list of region names in tab order
@@ -41,10 +42,11 @@ class Shell:
 
     def _resolve_layout(self, width: int = 80, height: int = 24,
                         offset_row: int = 0, offset_col: int = 0):
-        regions = self._layout.resolve(width, height,
-                                       offset_row=offset_row,
-                                       offset_col=offset_col)
+        regions, borders = self._layout.resolve(width, height,
+                                                offset_row=offset_row,
+                                                offset_col=offset_col)
         self._regions = {r.name: r for r in regions}
+        self._borders = borders
         self._focus_order = [
             r.name for r in sorted(regions, key=lambda r: (r.row, r.col))
         ]
@@ -164,6 +166,11 @@ class Shell:
     @property
     def regions(self) -> dict:
         return self._regions
+
+    @property
+    def borders(self) -> list:
+        """List of BorderSpec objects for every HSplit border line in the layout."""
+        return list(self._borders)
 
     @property
     def interactions(self) -> dict:
