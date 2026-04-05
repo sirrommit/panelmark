@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.2.0] — 2026-04-05
+
 ### Added
 
 - `BorderSpec` dataclass in `panelmark.layout` — carries `row`, `col`, `width`,
@@ -73,5 +77,6 @@ Initial release.
 - Shell language reference (`docs/shell-language.md`).
 - PyPI packaging: `pyproject.toml`, `LICENSE`, `CHANGELOG.md`, `AUTHORS`.
 
-[Unreleased]: https://github.com/sirrommit/panelmark/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/sirrommit/panelmark/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/sirrommit/panelmark/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sirrommit/panelmark/releases/tag/v0.1.0
